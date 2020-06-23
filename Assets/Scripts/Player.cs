@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Schema;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour
 {
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float padding = 1f;
+
+    [SerializeField] GameObject shotPrefab;
+    [SerializeField] float shotSpeed = 10f;
+    [SerializeField] float rateOfFire = 0.1f;
+
+    [SerializeField] GameObject player;
+
+    Coroutine firingCoroutine;
 
 
     float xMin;
@@ -29,6 +41,31 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
+        Fire();
+    }
+
+    private void Fire() {
+        if (Input.GetButtonDown("Fire1")) {
+            firingCoroutine = StartCoroutine(FireContinuously());
+        }
+
+        if (Input.GetButtonUp("Fire1")) {
+            StopCoroutine(firingCoroutine);
+        }
+    }
+
+    private IEnumerator FireContinuously() {
+        while (true) {
+            Vector3 shotPosition1 = new Vector3(player.transform.position.x - 0.5f, player.transform.position.y, 0);
+            GameObject shot1 = Instantiate(shotPrefab, shotPosition1 /* transform.position*/, Quaternion.identity);
+            shot1.GetComponent<Rigidbody2D>().velocity = new Vector2(0, shotSpeed);
+
+            Vector3 shotPosition2 = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y, 0);
+            GameObject shot2 = Instantiate(shotPrefab, shotPosition2, Quaternion.identity);
+            shot2.GetComponent<Rigidbody2D>().velocity = new Vector2(0, shotSpeed);
+
+            yield return new WaitForSeconds(rateOfFire);
+        }
     }
 
     private void SetMoveBoundaries() {
