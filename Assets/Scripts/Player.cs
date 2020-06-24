@@ -56,11 +56,11 @@ public class Player : MonoBehaviour
 
     private IEnumerator FireContinuously() {
         while (true) {
-            Vector3 shotPosition1 = new Vector3(player.transform.position.x - 0.5f, player.transform.position.y, 0);
+            Vector3 shotPosition1 = new Vector3(player.transform.position.x - 0.5f, player.transform.position.y + 0.7f, 0);
             GameObject shot1 = Instantiate(shotPrefab, shotPosition1 /* transform.position*/, Quaternion.identity);
             shot1.GetComponent<Rigidbody2D>().velocity = new Vector2(0, shotSpeed);
 
-            Vector3 shotPosition2 = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y, 0);
+            Vector3 shotPosition2 = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y + 0.7f, 0);
             GameObject shot2 = Instantiate(shotPrefab, shotPosition2, Quaternion.identity);
             shot2.GetComponent<Rigidbody2D>().velocity = new Vector2(0, shotSpeed);
 
